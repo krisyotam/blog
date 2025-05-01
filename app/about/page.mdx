@@ -1,4 +1,4 @@
-import AboutProfileImageClient from "../components/AboutProfileImageClient";
+import Image from "next/image";
 
 export const metadata = {
   title: 'Kris Yotam',
@@ -13,8 +13,17 @@ export const metadata = {
 # About
 
 <a href="https://twitter.com/krisyotam" target="_blank">
-  <AboutProfileImageClient />
+  <Image
+    src="/images/krisyotam-colored.jpg"
+    alt="Kris Yotam"
+    className="rounded-full bg-gray-100 block mt-2 mb-5 mx-auto sm:float-right sm:ml-5 sm:mb-5 grayscale hover:grayscale-0"
+    unoptimized
+    width={160}
+    height={160}
+    priority
+  />
 </a>
+
 
 I&rsquo;m a B.S. student in mathematics at IU Bloomington. I&rsquo;m from
 Chicago, IL, United States. In my free time, I enjoy [reading](https://app.thestorygraph.com/profile/krisyotam?redirect=true), watching [obscure anime](https://myanimelist.net/stacks/39037), writing([prose](https://krisyotam/categories), & [verse](https://krisyotam.com/poetry)), and 
