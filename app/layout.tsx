@@ -14,6 +14,7 @@ export const metadata = {
   title: "Kris Yotam's blog",
   description:
     "Kris Yotam is the CEO and founder of Vercel, a software engineer, and the creator of Next.js, Mongoose, Socket.io and other open source libraries.",
+  icons: { icon: '/images/logo.png' },
   openGraph: {
     title: "Kris Yotamg's blog",
     description:
@@ -46,6 +47,7 @@ export default function RootLayout({
       suppressHydrationWarning={true}
     >
       <head>
+        <link rel="icon" href="/images/logo.png" />
         <script
           dangerouslySetInnerHTML={{
             __html: `(${themeEffect.toString()})();(${doge.toString()})();`,
