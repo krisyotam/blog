@@ -19,7 +19,7 @@ export default function Collapse({ title, children, className }: CollapseProps) 
   return (
     <div
       className={cn(
-        "my-6 rounded-none bg-gray-200 dark:bg-[#333]", // Changed rounded-lg to rounded-none
+        "my-6 rounded-none bg-gray-200 dark:bg-[#333]",
         className
       )}
     >
@@ -37,7 +37,19 @@ export default function Collapse({ title, children, className }: CollapseProps) 
         />
       </button>
       {isOpen && (
-        <div className="px-4 py-4 prose dark:prose-invert">
+        <div className={cn(
+          "px-4 pb-4",
+          // Fix spacing issues with MDX content
+          "[&>*:first-child]:mt-0",      // Remove top margin from first child
+          "[&>*:last-child]:mb-0",       // Remove bottom margin from last child
+          "[&_h1]:mt-0",                 // Remove space above h1
+          "[&_h2]:mt-0",                 // Remove space above h2
+          "[&_h3]:mt-0",                 // Remove space above h3
+          "[&_h4]:mt-0",                 // Remove space above h4
+          "[&_p]:my-2",                  // Control paragraph spacing
+          "[&_ul]:my-2",                 // Control list spacing
+          "[&_ol]:my-2",                 // Control list spacing
+        )}>
           {children}
         </div>
       )}
