@@ -1,6 +1,6 @@
 const withMDX = require("@next/mdx")({
   options: {
-    providerImportSource: "@mdx-js/react",
+    providerImportSource: "./lib/mdx-provider",
     // The MDX parser configuration
     mdxOptions: {
       development: process.env.NODE_ENV === 'development'
