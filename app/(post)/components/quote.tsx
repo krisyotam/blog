@@ -13,22 +13,22 @@ export function Quote({ children, author, className }: QuoteProps) {
     "p-6",
     "rounded-none",
     "my-6",
-    "bg-gray-200",                        // Updated to match books.tsx light mode
-    "dark:bg-[#333]",                     // Updated to match books.tsx dark mode
+    "bg-gray-200",                       
+    "dark:bg-[#333]",                    
     "border-l-4",
-    "border-[hsl(var(--border))]",        
-    "dark:border-zinc-800",               // Removed !important
+    "border-gray-300",                    // Updated to softer border color in light mode
+    "dark:border-zinc-800",              
   ].join(" ");
 
   const footer = [
     "mt-4",
     "pt-4",
     "border-t",
-    "border-[hsl(var(--border))]",
-    "dark:border-zinc-800",               // Removed !important
+    "border-gray-300",                    // Updated to softer border color in light mode
+    "dark:border-zinc-800",              
     "text-sm",
     "text-muted-foreground",
-    "dark:text-zinc-400",                 // Removed !important
+    "dark:text-zinc-400",                
     "flex",
     "justify-end",
   ].join(" ");
