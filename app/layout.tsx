@@ -6,6 +6,7 @@ import { Analytics } from "./analytics";
 import { Header } from "./header";
 import { Footer } from "./footer";
 import { doge } from "./doge";
+import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -49,6 +50,12 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `(${themeEffect.toString()})();(${doge.toString()})();`,
           }}
+        />
+        {/* Seline Analytics */}
+        <Script
+          src="https://cdn.seline.com/seline.js"
+          data-token="dfbc504c3df49b9"
+          strategy="afterInteractive"
         />
       </head>
 
