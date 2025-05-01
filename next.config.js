@@ -1,9 +1,17 @@
-const withMDX = require("@next/mdx")();
+const withMDX = require("@next/mdx")({
+  options: {
+    providerImportSource: "@mdx-js/react",
+    // The MDX parser configuration
+    mdxOptions: {
+      development: process.env.NODE_ENV === 'development'
+    },
+  },
+});
 
 module.exports = withMDX({
   pageExtensions: ["ts", "tsx", "js", "jsx", "md", "mdx"],
   experimental: {
-    mdxRs: true,
+    mdxRs: true, // Keep using the Rust-based MDX compiler
   },
   images: {
     remotePatterns: [
@@ -28,6 +36,12 @@ module.exports = withMDX({
       {
         protocol: "https",
         hostname: "images-na.ssl-images-amazon.com",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "i.postimg.cc",
         port: "",
         pathname: "/**",
       },

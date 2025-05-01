@@ -1,0 +1,76 @@
+[
+    {
+      "id": "1",
+      "author": "John Doe",
+      "title": "Example Reference",
+      "year": 2023,
+      "publisher": "Example Publisher",
+      "url": "https://www.orimi.com/pdf-test.pdf",
+      "type": "article"
+    },
+    {
+      "id": "2",
+      "author": "Jane Smith",
+      "title": "Artificial Intelligence: A Modern Approach",
+      "year": 2021,
+      "publisher": "Academic Press",
+      "url": "https://www.orimi.com/pdf-test.pdf",
+      "type": "book"
+    },
+    {
+      "id": "3",
+      "author": "Alex Johnson",
+      "title": "The Future of Space Exploration",
+      "year": 2022,
+      "publisher": "Science Today",
+      "url": "https://www.orimi.com/pdf-test.pdf",
+      "type": "article"
+    },
+    {
+      "id": "4",
+      "author": "Maria Garcia",
+      "title": "Quantum Computing: Principles and Practice",
+      "year": 2023,
+      "publisher": "Tech Publications",
+      "url": "https://www.orimi.com/pdf-test.pdf",
+      "type": "book"
+    },
+    {
+      "id": "5",
+      "author": "David Lee",
+      "title": "Neural Networks and Deep Learning",
+      "year": 2022,
+      "publisher": "AI Research Press",
+      "url": "https://www.orimi.com/pdf-test.pdf",
+      "type": "book"
+    },
+    {
+      "id": "6",
+      "author": "Sarah Wilson",
+      "title": "The Ethics of Artificial Intelligence",
+      "year": 2023,
+      "publisher": "Philosophy Today",
+      "url": "https://www.orimi.com/pdf-test.pdf",
+      "type": "article"
+    },
+    {
+      "id": "7",
+      "author": "Michael Brown",
+      "title": "Understanding Machine Learning",
+      "year": 2022,
+      "publisher": "Tech Education Press",
+      "url": "https://www.orimi.com/pdf-test.pdf",
+      "type": "book"
+    },
+    {
+      "id": "8",
+      "author": "Emily White",
+      "title": "The Future of Human-AI Interaction",
+      "year": 2023,
+      "publisher": "Digital Horizons",
+      "url": "https://www.orimi.com/pdf-test.pdf",
+      "type": "article"
+    }
+  ]
+  
+  

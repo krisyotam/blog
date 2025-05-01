@@ -8,6 +8,145 @@ export const metadata = {
   }
 }
 
+<Box>
+  ## New Components Demo
+  This is a demonstration of all the new components added to the blog.
+  Each component offers different styling and functionality to enhance the content presentation.
+</Box>
+
+<Math type="inline">a^2 + b^2 = c^2</Math>
+
+<Math type="block" tex="\int_0^\infty e^{-x^2}\,dx = \tfrac{\sqrt{\pi}}{2}" />
+
+<Collapse title="Click to learn more about our new components">
+  ### Component Overview
+  - **Box**: A simple container with styling for highlighted content
+  - **Collapse**: An expandable/collapsible section (like this one!)
+  - **Excerpt**: For displaying quotes with title, author, and optional version/year
+  - **Quote**: For displaying simpler quotes with just the author
+  - **Book**: For displaying book recommendations with cover image
+</Collapse>
+
+<Quote author="Steve Jobs">
+  Design is not just what it looks like and feels like. Design is how it works.
+</Quote>
+
+<Excerpt 
+  title="The Art of Computer Programming" 
+  author="Donald Knuth" 
+  version="Volume 1" 
+  year="1968"
+>
+  An algorithm must be seen to be believed, and the best way to learn what an algorithm is all about is to try it.
+</Excerpt>
+
+<Book
+  cover="https://i.postimg.cc/ncWxzzZn/pride-and-prejudice-penguin-classics.jpg"
+  name="Pride and Prejudice"
+  author="Jane Austen"
+  link="https://www.amazon.com/Pride-Prejudice-Jane-Austen/dp/0141439513"
+/>
+
+
+
+# On the Beauty of Mathematical Notation
+
+Mathematics is not merely a language—it is a symphony of symbols, a choreography of logic and form. To test the robustness of our `Math` component, we present a flurry of expressions both elementary and esoteric.
+
+Consider the **Pythagorean Theorem** in its most basic form:  
+<Math type="inline">a^2 + b^2 = c^2</Math>
+
+## Triple Integrals and Volume
+
+A fundamental result in multivariable calculus is the computation of volume via triple integrals. For a region <Math type="inline">E</Math> in 3D space, the volume is given by:
+
+<Math type="block" tex="\iiint_E f(x, y, z) \, dx\, dy\, dz" />
+
+In spherical coordinates, where <Math type="inline">x = \rho\sin\phi\cos\theta</Math>, <Math type="inline">y = \rho\sin\phi\sin\theta</Math>, and <Math type="inline">z = \rho\cos\phi</Math>, the Jacobian determinant introduces an extra factor of <Math type="inline">\rho^2\sin\phi</Math>. Thus:
+
+<Math type="block" tex="\iiint_E f(\rho, \phi, \theta) \rho^2 \sin\phi \, d\rho\, d\phi\, d\theta" />
+
+## Summation and Limits
+
+The Basel problem, solved by Euler, explores the value of the infinite sum of reciprocals of squares:
+
+<Math type="block" tex="\sum_{n=1}^{\infty} \frac{1}{n^2} = \frac{\pi^2}{6}" />
+
+Nested summations can test vertical alignment and large limits:
+
+<Math type="block" tex="\sum_{i=1}^n \sum_{j=1}^m a_{ij}b_{ji} = \operatorname{tr}(AB)" />
+
+Or even:
+
+<Math type="block" tex="\sum_{k=1}^{\infty} \frac{(-1)^{k+1}}{k} = \ln(2)" />
+
+## Stirling's Approximation and Limits
+
+The behavior of factorials at infinity:
+
+<Math type="block" tex="\lim_{n \to \infty} \frac{n!}{\sqrt{2\pi n} \left(\frac{n}{e}\right)^n} = 1" />
+
+## Fourier Transform
+
+A classic in signal analysis:
+
+<Math type="block" tex="\hat{f}(\xi) = \int_{-\infty}^{\infty} f(x) e^{-2\pi i x \xi} \, dx" />
+
+And the inverse:
+
+<Math type="block" tex="f(x) = \int_{-\infty}^{\infty} \hat{f}(\xi) e^{2\pi i x \xi} \, d\xi" />
+
+## Dirac Delta Function
+
+In distribution theory:
+
+<Math type="block" tex="\int_{-\infty}^\infty f(x)\delta(x-a)\,dx = f(a)" />
+
+## Gaussian Integral
+
+A gem of analysis:
+
+<Math type="block" tex="\int_0^\infty e^{-x^2}\,dx = \tfrac{\sqrt{\pi}}{2}" />
+
+## Tensor Notation and Einstein Summation
+
+Stress test with indices:
+
+<Math type="block" tex="T^{\mu\nu} = g^{\mu\alpha}g^{\nu\beta}T_{\alpha\beta}" />
+
+Or an expression involving the Levi-Civita symbol:
+
+<Math type="block" tex="\varepsilon_{ijk}\varepsilon^{lmn} = \det
+\begin{bmatrix}
+\delta_i^l & \delta_i^m & \delta_i^n \\
+\delta_j^l & \delta_j^m & \delta_j^n \\
+\delta_k^l & \delta_k^m & \delta_k^n \\
+\end{bmatrix}" />
+
+## Conclusion
+
+This post serves both as an ode to the expressive power of mathematics and a rigorous stress test for symbol rendering.
+
+<Math type="inline">\blacksquare</Math>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Following our [Series B last December](/2020/next-for-vercel), I'm happy to announce we've raised a [**$102M Series C**](https://techcrunch.com/2021/06/23/vercel-raises-102m-series-c-for-its-next-js-based-front-end-development-platform) from existing and new investors.
 
 Our vision of the Web is a global realtime medium for both creators and consumers,
@@ -89,3 +228,7 @@ we make. To name some examples:
 Our primary fitness function is your success for your customers. Not
 every visitor might understand fully how every page is built, but if the
 experience is delightful and fast, they ought to think it was powered by Vercel.
+
+<Citation id="making-the-web-faster" />
+
+<Bibliography dir="app/(post)/2021/making-the-web-faster" />

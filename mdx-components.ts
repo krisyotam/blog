@@ -17,6 +17,17 @@ import { Callout } from "app/(post)/components/callout";
 import { YouTube } from "app/(post)/components/youtube";
 import { Ref, FootNotes, FootNote } from "app/(post)/components/footnotes";
 import { Blockquote as blockquote } from "app/(post)/components/blockquote";
+import { Bibliography } from "app/(post)/components/bibliography";
+import { Citation } from "app/(post)/components/citation";
+import { Commento } from "app/(post)/components/commento";
+import { Box } from "app/(post)/components/box";
+import Collapse from "app/(post)/components/collapse";
+import { Excerpt } from "app/(post)/components/excerpt";
+import { Quote } from "app/(post)/components/quote";
+import Book from "app/(post)/components/book";
+
+// import your math component
+import Math from "app/(post)/components/math";
 
 export function useMDXComponents(components: {
   [component: string]: React.ComponentType;
@@ -46,5 +57,14 @@ export function useMDXComponents(components: {
     Ref,
     FootNotes,
     FootNote,
+    Math,
+    Bibliography,
+    Citation,
+    Commento,
+    Box,
+    Collapse,
+    Excerpt,
+    Quote,
+    Book
   };
 }

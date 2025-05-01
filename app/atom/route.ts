@@ -6,15 +6,15 @@ export async function GET() {
   return new Response(
     `<?xml version="1.0" encoding="utf-8"?>
   <feed xmlns="http://www.w3.org/2005/Atom">
-    <title>Guillermo Rauch</title>
+    <title>Kris Yotam</title>
     <subtitle>Essays</subtitle>
-    <link href="https://rauchg.com/atom" rel="self"/>
-    <link href="https://rauchg.com/"/>
+    <link href="https://krisyotam.net/atom" rel="self"/>
+    <link href="https://krisyotam.net/"/>
     <updated>${posts[0].date}</updated>
-    <id>https://rauchg.com/</id>
+    <id>https://krisyotam.net/</id>
     <author>
-      <name>Guillermo Rauch</name>
-      <email>rauchg@gmail.com</email>
+      <name>Kris Yotam</name>
+      <email>krisyotam@protonmail.com</email>
     </author>
     ${posts.slice(0, max).reduce((acc, post) => {
       const dateMatch = post.date.match(/\d{4}/);
@@ -23,7 +23,7 @@ export async function GET() {
         <entry>
           <id>${post.id}</id>
           <title>${post.title}</title>
-          <link href="https://rauchg.com/${dateMatch[0]}/${post.id}"/>
+          <link href="https://krisyotam.net/${dateMatch[0]}/${post.id}"/>
           <updated>${post.date}</updated>
         </entry>`;
     }, "")}

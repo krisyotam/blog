@@ -10,15 +10,15 @@ import { doge } from "./doge";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Guillermo Rauch's blog",
+  title: "Kris Yotam's blog",
   description:
-    "Guillermo Rauch is the CEO and founder of Vercel, a software engineer, and the creator of Next.js, Mongoose, Socket.io and other open source libraries.",
+    "Kris Yotam is the CEO and founder of Vercel, a software engineer, and the creator of Next.js, Mongoose, Socket.io and other open source libraries.",
   openGraph: {
-    title: "Guillermo Rauchg's blog",
+    title: "Kris Yotamg's blog",
     description:
-      "Guillermo Rauch is the CEO and founder of Vercel, a software engineer, and the creator of Next.js, Mongoose, Socket.io and other open source libraries.",
-    url: "https://rauchg.com",
-    siteName: "Guillermo Rauchg's blog",
+      "Kris Yotam is the CEO and founder of Vercel, a software engineer, and the creator of Next.js, Mongoose, Socket.io and other open source libraries.",
+    url: "https://krisyotam.net",
+    siteName: "Kris Yotamg's blog",
     images: ["/opengraph-image"],
   },
   twitter: {
@@ -26,7 +26,7 @@ export const metadata = {
     site: "@rauchg",
     creator: "@rauchg",
   },
-  metadataBase: new URL("https://rauchg.com"),
+  metadataBase: new URL("https://krisyotam.net"),
 };
 
 export const viewport = {
