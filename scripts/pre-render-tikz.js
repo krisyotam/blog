@@ -19,6 +19,22 @@ const PUBLIC_SVG_DIR = path.join(process.cwd(), 'public', 'tikz-svg');
 // Ensure the output directory exists
 if (!fs.existsSync(PUBLIC_SVG_DIR)) {
   fs.mkdirSync(PUBLIC_SVG_DIR, { recursive: true });
+} else {
+  // Delete all existing SVG files to ensure clean regeneration
+  console.log('Cleaning existing SVG files...');
+  const existingFiles = fs.readdirSync(PUBLIC_SVG_DIR);
+  for (const file of existingFiles) {
+    if (file.endsWith('.svg')) {
+      const filePath = path.join(PUBLIC_SVG_DIR, file);
+      try {
+        fs.unlinkSync(filePath);
+        console.log(`Deleted: ${filePath}`);
+      } catch (err) {
+        console.error(`Failed to delete ${filePath}:`, err);
+      }
+    }
+  }
+  console.log('Finished cleaning existing SVG files');
 }
 
 // Check if LaTeX commands are available
@@ -47,14 +63,46 @@ if (!hasDvisvgm) {
 // Extract TikZ code blocks from MDX files
 function extractTikzBlocks(mdxContent) {
   const tikzBlocks = [];
+  const uniqueBlocksMap = new Map(); // Maps diagram content to count of occurrences
   
-  // Match both tikzpicture environments
+  // First pattern: Raw tikzpicture environments
   const tikzRegex = /\\begin{tikzpicture}([\s\S]*?)\\end{tikzpicture}/g;
   let match;
   
   while ((match = tikzRegex.exec(mdxContent)) !== null) {
     const fullMatch = match[0];
-    tikzBlocks.push(fullMatch);
+    const normalizedContent = fullMatch.replace(/\s+/g, ''); // Normalize whitespace
+    
+    if (!uniqueBlocksMap.has(normalizedContent)) {
+      uniqueBlocksMap.set(normalizedContent, 1);
+      tikzBlocks.push(fullMatch);
+    } else {
+      uniqueBlocksMap.set(normalizedContent, uniqueBlocksMap.get(normalizedContent) + 1);
+    }
+  }
+
+  // Second pattern: String.raw blocks in MDX with tikzpicture
+  const stringRawRegex = /String\.raw`\s*(\\begin{tikzpicture}[\s\S]*?\\end{tikzpicture})\s*`/g;
+  
+  while ((match = stringRawRegex.exec(mdxContent)) !== null) {
+    if (match[1]) {
+      const tikzCode = match[1];
+      const normalizedContent = tikzCode.replace(/\s+/g, ''); // Normalize whitespace
+      
+      if (!uniqueBlocksMap.has(normalizedContent)) {
+        uniqueBlocksMap.set(normalizedContent, 1);
+        tikzBlocks.push(tikzCode);
+      } else {
+        uniqueBlocksMap.set(normalizedContent, uniqueBlocksMap.get(normalizedContent) + 1);
+      }
+    }
+  }
+  
+  // Log any diagrams that appear multiple times
+  for (const [content, count] of uniqueBlocksMap.entries()) {
+    if (count > 1) {
+      console.log(`Note: Found ${count} instances of the same TikZ diagram`);
+    }
   }
   
   return tikzBlocks;
@@ -171,37 +219,8 @@ ${tikzCode}
   }
 }
 
-// Load existing registry
-function loadExistingRegistry() {
-  const registryFile = path.join(PUBLIC_SVG_DIR, 'registry.json');
-  try {
-    if (fs.existsSync(registryFile)) {
-      return JSON.parse(fs.readFileSync(registryFile, 'utf8'));
-    }
-  } catch (err) {
-    console.warn('Failed to load existing registry:', err);
-  }
-  return {};
-}
-
 // Process all MDX files to extract and compile TikZ diagrams
 async function processAllFiles() {
-  // Get existing registry and list of SVG files
-  const existingRegistry = loadExistingRegistry();
-  const existingSvgFiles = new Set();
-  
-  try {
-    // Get list of existing SVG files
-    const files = fs.readdirSync(PUBLIC_SVG_DIR);
-    files.forEach(file => {
-      if (file.endsWith('.svg')) {
-        existingSvgFiles.add(file);
-      }
-    });
-  } catch (err) {
-    console.warn('Error reading existing SVG files:', err);
-  }
-  
   const mdxFiles = glob.sync('app/**/*.mdx');
   const tikzCodeMap = new Map();
   
@@ -224,24 +243,13 @@ async function processAllFiles() {
   
   // Compile each unique TikZ code to SVG
   const tikzRegistry = {};
-  const svgHashesInUse = new Set();
   
   for (const [hash, tikzCode] of tikzCodeMap.entries()) {
     console.log(`Processing TikZ diagram with hash: ${hash}`);
-    svgHashesInUse.add(`${hash}.svg`);
     
     const outputFile = path.join(PUBLIC_SVG_DIR, `${hash}.svg`);
     
-    // Skip if SVG already exists and is valid
-    if (fs.existsSync(outputFile) && isSvgValid(outputFile)) {
-      console.log(`SVG already exists for ${hash}, skipping compilation`);
-      tikzRegistry[hash] = {
-        hash,
-        tikzCode
-      };
-      continue;
-    }
-    
+    // Always regenerate SVG
     console.log(`Compiling TikZ diagram with hash: ${hash}`);
     const svg = compileTikzToSvg(tikzCode);
     
@@ -253,19 +261,6 @@ async function processAllFiles() {
         hash,
         tikzCode
       };
-    }
-  }
-  
-  // Remove orphaned SVGs (SVGs that no longer have corresponding TikZ code)
-  for (const svgFile of existingSvgFiles) {
-    if (!svgHashesInUse.has(svgFile)) {
-      const filePath = path.join(PUBLIC_SVG_DIR, svgFile);
-      console.log(`Removing orphaned SVG: ${filePath}`);
-      try {
-        fs.unlinkSync(filePath);
-      } catch (err) {
-        console.error(`Failed to remove orphaned SVG ${filePath}:`, err);
-      }
     }
   }
   
