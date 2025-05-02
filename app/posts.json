@@ -104,6 +104,13 @@
       "title": "Problems from Calculus by McMullen I",
       "category": "Mathematics",
       "tags": ["calculus", "problems", "mcmullen"]
+    },
+    {
+      "id": "multiples-of-3-or-5",
+      "date": "April 26, 2025",
+      "title": "Multiples of 3 or 5",
+      "category": "Project Euler",
+      "tags": ["Programming", "Problems"]
     }
   ]
 }
