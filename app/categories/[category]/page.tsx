@@ -4,11 +4,13 @@ import Link from 'next/link';
 
 export const revalidate = 3600;
 
-interface Params {
+// Update type to match Next.js expected types
+type Props = {
   params: { category: string };
+  searchParams: { [key: string]: string | string[] | undefined };
 }
 
-export default async function CategoryPage({ params }: Params) {
+export default async function CategoryPage({ params }: Props) {
   const categoryParam = params.category;
   const category = decodeURIComponent(categoryParam);
   const posts = await getPosts();
