@@ -4,13 +4,13 @@ import Link from 'next/link';
 
 export const revalidate = 3600;
 
-// Update type to match Next.js expected types
-type Props = {
+// Remove the custom Props type altogether
+export default async function CategoryPage({
+  params,
+}: {
   params: { category: string };
-  searchParams: { [key: string]: string | string[] | undefined };
-}
-
-export default async function CategoryPage({ params }: Props) {
+  searchParams?: { [key: string]: string | string[] | undefined };
+}) {
   const categoryParam = params.category;
   const category = decodeURIComponent(categoryParam);
   const posts = await getPosts();
