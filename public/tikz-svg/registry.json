@@ -1,0 +1,10 @@
+{
+  "42a1ed443f61435950e86ef0c5ee89ed": {
+    "hash": "42a1ed443f61435950e86ef0c5ee89ed",
+    "tikzCode": "\\begin{tikzpicture}\n    % Nodes\n    \\node[circle,draw] (A) at (0,0) {A};\n    \\node[circle,draw] (B) at (2,1) {B};\n    \\node[circle,draw] (C) at (2,-1) {C};\n    \\node[circle,draw] (D) at (4,0) {D};\n    \n    % Edges\n    \\draw[->] (A) -- (B);\n    \\draw[->] (A) -- (C);\n    \\draw[->] (B) -- (D);\n    \\draw[->] (C) -- (D);\n  \\end{tikzpicture}"
+  },
+  "007f48c7548c78cd14a2aedaeab78612": {
+    "hash": "007f48c7548c78cd14a2aedaeab78612",
+    "tikzCode": "\\begin{tikzpicture}[\n  node/.style={circle, draw, fill=white, minimum size=8mm},\n  edge/.style={->, semithick, shorten >=2pt},\n  every loop/.style={min distance=10mm, looseness=10},\n  >=Stealth\n]\n  % Center coordinate\n  \\coordinate (C) at (0,0);\n\n  % Place five nodes on a circle\n  \\foreach \\i/\\name in {90/1, 18/2, -54/3, -126/4, -198/5} {\n    \\node[node] (N\\name) at (\\i:3cm) {\\name};\n  }\n\n  % Radial edges from center\n  \\foreach \\name in {1,2,3,4,5}\n    \\draw[edge] (C) -- (N\\name);\n\n  % Circular \"ring\" edges\n  \\foreach \\a/\\b in {1/2,2/3,3/4,4/5,5/1}\n    \\draw[edge, red, bend left=20] (N\\a) to (N\\b);\n\n  % Diagonal chords\n  \\draw[edge, blue, dashed] (N1) to (N3);\n  \\draw[edge, green, decorate, decoration={snake, amplitude=1pt, segment length=4pt}] (N2) to[bend right=30] (N5);\n\n  % Loop at the center\n  \\draw[edge, purple, thick] (C) edge[loop above] ();\n\n  % Background highlight\n  \\begin{scope}[on background layer]\n    \\fill[yellow, opacity=0.1] (C) circle (3.2cm);\n  \\end{scope}\n\n  % Title label\n  \\node[below=1.5cm] at (C) {\\itshape Complex Five-Node Graph};\n\n\\end{tikzpicture}"
+  }
+}

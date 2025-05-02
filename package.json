@@ -41,6 +41,7 @@
     "autoprefixer": "^10.4.14",
     "eslint": "^8.56.0",
     "eslint-config-next": "15.0.2",
+    "glob": "^11.0.2",
     "postcss": "^8.4.21",
     "prettier": "^2.8.4",
     "tailwindcss": "^3.3.1",
@@ -60,9 +61,10 @@
   },
   "scripts": {
     "dev": "next dev --turbopack -H 0.0.0.0",
-    "build": "next build",
+    "build": "node scripts/pre-render-tikz.js && next build",
     "start": "next start",
-    "postinstall": "node ./fonts/init.mjs"
+    "postinstall": "node ./fonts/init.mjs",
+    "pre-render-tikz": "node scripts/pre-render-tikz.js"
   },
   "prettier": {
     "arrowParens": "avoid"

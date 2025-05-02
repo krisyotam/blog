@@ -78,26 +78,45 @@ export async function POST(request: Request) {
       }, { status: 500 });
     }
     
-    // Create a platform-agnostic temp directory
-    const tempDir = os.tmpdir();
+    // Create a platform-agnostic temp directory without spaces
+    // On Windows, use c:\tikztemp to avoid issues with spaces
+    let baseDir = os.platform() === 'win32' ? 'c:\\tikztemp' : os.tmpdir();
     const dirId = randomUUID().slice(0, 8);
-    const tmp = path.join(tempDir, `tikz-${dirId}`);
+    let tmp = path.join(baseDir, dirId);
     
     try {
       fs.mkdirSync(tmp, { recursive: true });
     } catch (err) {
       console.error('Failed to create temp directory:', err);
-      return NextResponse.json({ 
-        error: 'Failed to create temporary directory', 
-        details: (err as Error).message 
-      }, { status: 500 });
+      
+      // Try a fallback location if the first one fails
+      if (os.platform() === 'win32') {
+        baseDir = 'c:\\temp';
+        const fallbackTmp = path.join(baseDir, `tikz-${dirId}`);
+        try {
+          fs.mkdirSync(baseDir, { recursive: true });
+          fs.mkdirSync(fallbackTmp, { recursive: true });
+          console.log('Created fallback temp directory:', fallbackTmp);
+          // Use the fallback directory
+          tmp = fallbackTmp;
+        } catch (fallbackErr) {
+          return NextResponse.json({ 
+            error: 'Failed to create temporary directory', 
+            details: (fallbackErr as Error).message 
+          }, { status: 500 });
+        }
+      } else {
+        return NextResponse.json({ 
+          error: 'Failed to create temporary directory', 
+          details: (err as Error).message 
+        }, { status: 500 });
+      }
     }
     
     console.log('Created temp directory:', tmp)
     
     const texFile = path.join(tmp, 'diagram.tex')
     const dviFile = path.join(tmp, 'diagram.dvi')
-    const pdfFile = path.join(tmp, 'diagram.pdf')
     const svgFile = path.join(tmp, 'diagram.svg')
 
     // full TikZ preamble
@@ -120,13 +139,16 @@ ${code}
     fs.writeFileSync(texFile, tex)
     console.log('Wrote TeX file:', texFile)
 
-    // Use latex to generate DVI directly
+    // Use latex to generate DVI directly (preferred method)
     if (hasLatex) {
+      // Fix path handling for Windows
+      const outputDir = tmp.replace(/\\/g, '/');
+      
       const latexResult = spawnSync('latex', [
         '-interaction=nonstopmode', 
-        '-output-directory=' + tmp, // Use single argument format to avoid space issues
+        `-output-directory=${outputDir}`,
         texFile
-      ], { shell: true }); // Use shell: true for Windows
+      ], { shell: true });
       
       console.log('latex stdout:', latexResult.stdout?.toString())
       console.log('latex stderr:', latexResult.stderr?.toString())
@@ -143,9 +165,9 @@ ${code}
     else if (hasPdflatex) {
       const pdflatexResult = spawnSync('pdflatex', [
         '-interaction=nonstopmode', 
-        '-output-directory=' + tmp, // Use single argument format to avoid space issues
+        `-output-directory=${tmp.replace(/\\/g, '/')}`,
         texFile
-      ], { shell: true }); // Use shell: true for Windows
+      ], { shell: true }); 
       
       console.log('pdflatex stdout:', pdflatexResult.stdout?.toString())
       
@@ -170,7 +192,7 @@ ${code}
       dviFile, 
       '-o', 
       svgFile
-    ], { shell: true }); // Use shell: true for Windows
+    ], { shell: true }); 
     
     console.log('dvisvgm stdout:', dvisvgmResult.stdout?.toString())
     console.log('dvisvgm stderr:', dvisvgmResult.stderr?.toString())
