@@ -10,3 +10,5 @@ TODO
 .env*.local
 fonts/*
 !fonts/init.mjs
+# Make sure pre-rendered TikZ SVGs are tracked
+!public/tikz-svg/

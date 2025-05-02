@@ -1,0 +1,39 @@
+name: Pre-render TikZ Diagrams
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:  # Allow manual triggering
+
+jobs:
+  pre-render:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Install LaTeX and required packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y texlive texlive-latex-extra texlive-fonts-extra texlive-plain-generic dvisvgm
+      
+      - name: Pre-render TikZ diagrams
+        run: node scripts/pre-render-tikz.js
+      
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "GitHub Actions Bot"
+          git config --global user.email "actions@github.com"
+          git add public/tikz-svg/
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Pre-render TikZ diagrams" && git push) 

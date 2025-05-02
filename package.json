@@ -61,7 +61,7 @@
   },
   "scripts": {
     "dev": "next dev --turbopack -H 0.0.0.0",
-    "build": "node scripts/pre-render-tikz.js && next build",
+    "build": "next build",
     "start": "next start",
     "postinstall": "node ./fonts/init.mjs",
     "pre-render-tikz": "node scripts/pre-render-tikz.js"

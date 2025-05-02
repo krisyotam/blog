@@ -1,0 +1,2 @@
+# This file ensures the tikz-svg directory is tracked by git
+# TikZ diagrams will be pre-rendered by GitHub Actions and stored in this directory 
