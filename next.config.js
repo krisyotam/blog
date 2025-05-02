@@ -13,8 +13,7 @@ module.exports = withMDX({
   experimental: {
     mdxRs: true, // Keep using the Rust-based MDX compiler
   },
-  // Skip TikZ pre-rendering on Vercel
-  onBuildStart: process.env.VERCEL ? [] : ['node scripts/pre-render-tikz.js'],
+  // TikZ pre-rendering is now handled by GitHub Actions
   images: {
     remotePatterns: [
       {
