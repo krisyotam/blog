@@ -15,6 +15,19 @@ function commandExists(command: string): boolean {
   }
 }
 
+// Generate a fallback SVG when LaTeX is not available
+function generateFallbackSVG(message: string): string {
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="120" viewBox="0 0 400 120">
+    <rect width="400" height="120" fill="#f8f9fa" stroke="#d2d3d4" stroke-width="1"/>
+    <text x="50%" y="50%" font-family="system-ui, sans-serif" font-size="14" text-anchor="middle" dominant-baseline="middle" fill="#666">
+      ${message}
+    </text>
+    <text x="50%" y="75%" font-family="system-ui, sans-serif" font-size="12" text-anchor="middle" dominant-baseline="middle" fill="#888">
+      Please check vercel.json configuration
+    </text>
+  </svg>`;
+}
+
 export async function POST(request: Request) {
   console.log('TikZ API route called')
   
@@ -29,6 +42,42 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'No TikZ code provided' }, { status: 400 })
     }
 
+    // Check for available TeX commands
+    const hasLatex = commandExists('latex');
+    const hasPdflatex = commandExists('pdflatex');
+    const hasDvisvgm = commandExists('dvisvgm');
+    
+    console.log('Available commands:', { 
+      latex: hasLatex, 
+      pdflatex: hasPdflatex, 
+      dvisvgm: hasDvisvgm 
+    });
+    
+    // If LaTeX tools aren't available, return a notice SVG
+    if (process.env.VERCEL && (!hasLatex && !hasPdflatex)) {
+      const fallbackSVG = generateFallbackSVG("LaTeX rendering requires configuration in vercel.json");
+      return new NextResponse(fallbackSVG, {
+        headers: {
+          'Content-Type': 'image/svg+xml',
+          'Cache-Control': 's-maxage=86400, stale-while-revalidate',
+        },
+      });
+    }
+    
+    if (!hasLatex && !hasPdflatex) {
+      return NextResponse.json({ 
+        error: 'TeX compilation not available',
+        details: 'Neither latex nor pdflatex is available on this system'
+      }, { status: 500 });
+    }
+    
+    if (!hasDvisvgm) {
+      return NextResponse.json({ 
+        error: 'SVG conversion not available',
+        details: 'dvisvgm is not available on this system'
+      }, { status: 500 });
+    }
+    
     // Create a platform-agnostic temp directory
     const tempDir = os.tmpdir();
     const dirId = randomUUID().slice(0, 8);
@@ -45,31 +94,6 @@ export async function POST(request: Request) {
     }
     
     console.log('Created temp directory:', tmp)
-    
-    // Check for available TeX commands
-    const hasLatex = commandExists('latex');
-    const hasPdflatex = commandExists('pdflatex');
-    const hasDvisvgm = commandExists('dvisvgm');
-    
-    console.log('Available commands:', { 
-      latex: hasLatex, 
-      pdflatex: hasPdflatex, 
-      dvisvgm: hasDvisvgm 
-    });
-    
-    if (!hasLatex && !hasPdflatex) {
-      return NextResponse.json({ 
-        error: 'TeX compilation not available',
-        details: 'Neither latex nor pdflatex is available on this system'
-      }, { status: 500 });
-    }
-    
-    if (!hasDvisvgm) {
-      return NextResponse.json({ 
-        error: 'SVG conversion not available',
-        details: 'dvisvgm is not available on this system'
-      }, { status: 500 });
-    }
     
     const texFile = path.join(tmp, 'diagram.tex')
     const dviFile = path.join(tmp, 'diagram.dvi')
