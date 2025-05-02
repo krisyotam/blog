@@ -4,14 +4,17 @@ import Link from 'next/link';
 
 export const revalidate = 3600;
 
-// Remove the custom Props type altogether
+type Props = {
+  params: Promise<{ category: string }>;
+  searchParams?: { [key: string]: string | string[] | undefined };
+}
+
 export default async function CategoryPage({
   params,
-}: {
-  params: { category: string };
-  searchParams?: { [key: string]: string | string[] | undefined };
-}) {
-  const categoryParam = params.category;
+}: Props) {
+  // Await the params object before accessing its properties
+  const resolvedParams = await params;
+  const categoryParam = resolvedParams.category;
   const category = decodeURIComponent(categoryParam);
   const posts = await getPosts();
   const filtered = posts
