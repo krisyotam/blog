@@ -6,7 +6,7 @@ export const revalidate = 3600;
 
 type Props = {
   params: Promise<{ category: string }>;
-  searchParams?: { [key: string]: string | string[] | undefined };
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 export default async function CategoryPage({
