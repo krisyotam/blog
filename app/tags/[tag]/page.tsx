@@ -4,12 +4,15 @@ import Link from 'next/link';
 
 export const revalidate = 3600;
 
-interface Params {
-  params: { tag: string };
+type Props = {
+  params: Promise<{ tag: string }>;
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-export default async function TagPage({ params }: Params) {
-  const tagParam = params.tag;
+export default async function TagPage({ params }: Props) {
+  // Await the params object before accessing its properties
+  const resolvedParams = await params;
+  const tagParam = resolvedParams.tag;
   const tag = decodeURIComponent(tagParam);
   const posts = await getPosts();
   const filtered = posts
