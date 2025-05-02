@@ -23,7 +23,7 @@ function generateFallbackSVG(message: string): string {
       ${message}
     </text>
     <text x="50%" y="75%" font-family="system-ui, sans-serif" font-size="12" text-anchor="middle" dominant-baseline="middle" fill="#888">
-      Please check vercel.json configuration
+      Check public/tikz-svg directory for pre-rendered SVGs
     </text>
   </svg>`;
 }
@@ -44,18 +44,16 @@ export async function POST(request: Request) {
 
     // Check for available TeX commands
     const hasLatex = commandExists('latex');
-    const hasPdflatex = commandExists('pdflatex');
     const hasDvisvgm = commandExists('dvisvgm');
     
     console.log('Available commands:', { 
       latex: hasLatex, 
-      pdflatex: hasPdflatex, 
       dvisvgm: hasDvisvgm 
     });
     
     // If LaTeX tools aren't available, return a notice SVG
-    if (process.env.VERCEL && (!hasLatex && !hasPdflatex)) {
-      const fallbackSVG = generateFallbackSVG("LaTeX rendering requires configuration in vercel.json");
+    if (process.env.VERCEL || !hasLatex) {
+      const fallbackSVG = generateFallbackSVG("Pre-rendered SVGs available in public/tikz-svg");
       return new NextResponse(fallbackSVG, {
         headers: {
           'Content-Type': 'image/svg+xml',
@@ -64,10 +62,10 @@ export async function POST(request: Request) {
       });
     }
     
-    if (!hasLatex && !hasPdflatex) {
+    if (!hasLatex) {
       return NextResponse.json({ 
         error: 'TeX compilation not available',
-        details: 'Neither latex nor pdflatex is available on this system'
+        details: 'latex is not available on this system'
       }, { status: 500 });
     }
     
@@ -129,7 +127,9 @@ export async function POST(request: Request) {
   shapes.geometric,
   matrix,
   cd,
-  calc
+  calc,
+  decorations.pathmorphing,
+  backgrounds
 }
 \\begin{document}
 ${code}
@@ -140,50 +140,24 @@ ${code}
     console.log('Wrote TeX file:', texFile)
 
     // Use latex to generate DVI directly (preferred method)
-    if (hasLatex) {
-      // Fix path handling for Windows
-      const outputDir = tmp.replace(/\\/g, '/');
-      
-      const latexResult = spawnSync('latex', [
-        '-interaction=nonstopmode', 
-        `-output-directory=${outputDir}`,
-        texFile
-      ], { shell: true });
-      
-      console.log('latex stdout:', latexResult.stdout?.toString())
-      console.log('latex stderr:', latexResult.stderr?.toString())
-      
-      if (latexResult.error || latexResult.status !== 0) {
-        console.error('latex error:', latexResult.error)
-        return NextResponse.json({ 
-          error: 'TikZ compilation failed: latex error',
-          details: latexResult.stderr?.toString() || latexResult.error?.message
-        }, { status: 500 })
-      }
-    }
-    // If latex isn't available but pdflatex is, use it and convert PDF to SVG directly
-    else if (hasPdflatex) {
-      const pdflatexResult = spawnSync('pdflatex', [
-        '-interaction=nonstopmode', 
-        `-output-directory=${tmp.replace(/\\/g, '/')}`,
-        texFile
-      ], { shell: true }); 
-      
-      console.log('pdflatex stdout:', pdflatexResult.stdout?.toString())
-      
-      if (pdflatexResult.error || pdflatexResult.status !== 0) {
-        console.error('pdflatex error:', pdflatexResult.error)
-        return NextResponse.json({ 
-          error: 'TikZ compilation failed: pdflatex error',
-          details: pdflatexResult.stderr?.toString() || pdflatexResult.error?.message
-        }, { status: 500 })
-      }
-      
-      // If using pdflatex, we need pdf2svg or Inkscape or similar to convert the PDF to SVG
+    // Fix path handling for Windows - convert backslashes to forward slashes
+    const outputDir = tmp.replace(/\\/g, '/');
+    
+    const latexResult = spawnSync('latex', [
+      '-interaction=nonstopmode', 
+      `-output-directory=${outputDir}`,
+      texFile
+    ], { shell: true });
+    
+    console.log('latex stdout:', latexResult.stdout?.toString())
+    console.log('latex stderr:', latexResult.stderr?.toString())
+    
+    if (latexResult.error || latexResult.status !== 0) {
+      console.error('latex error:', latexResult.error)
       return NextResponse.json({ 
-        error: 'System configuration issue',
-        details: 'This server is configured with pdflatex but not latex. Contact the administrator to install the latex package.'
-      }, { status: 500 });
+        error: 'TikZ compilation failed: latex error',
+        details: latexResult.stderr?.toString() || latexResult.error?.message
+      }, { status: 500 })
     }
     
     // Convert DVI to SVG
