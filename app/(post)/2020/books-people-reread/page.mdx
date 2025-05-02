@@ -1,23 +1,127 @@
-import { Books } from './books'
-
 export const metadata = {
   title: 'Books people re-read',
-  description: 'A list of books people re-read, sorted by how frequently they were suggested on Twitter.',
+  description: 'A list of mathematics books you should re-read.',
   openGraph: {
     title: 'Books people re-read',
-    description: 'A list of books people re-read, sorted by how frequently they were suggested on Twitter.',
+    description: 'A list of mathematics books you should re-read.',
     images: [{ url: '/og/books-people-reread' }],
   }
 }
 
-Last night I [asked a question](https://twitter.com/rauchg/status/1289761175253602305) on Twitter: what books have you read more than once?
+I own a lot of [textbooks](https://krisyotam/library). I've often been asked why?
 
-As it turns out, it turned into a wonderful way of crowdsourcing a compelling reading list from quite a few thoughtful people.
+As it turns out, it is quite comforting to have a reference repository of useful exposition that solves problems in a number of different ways.
 
-I took the opportunity to [dump the data on Notion](https://rauchg.notion.site/fa0a337c38074aa9b30fdddc6ef4ec2e?v=29294b4b7b0f405f8f5eaf4454c258a2) and write a Next.js page using the new stable [Incremental Static Regeneration](https://nextjs.org/blog/next-9-5#stable-incremental-static-regeneration) to produce this list and keep it up to date automatically.
+I took this as a opportunity to compile a list of some reference books I think every math student should own.
 
-Here are all the books, sorted by how frequently they were suggested.
+Here are all the books I sorted, and those frequently suggested. This is continually updated so feel free to check back. 
 
-<div className="w-screen absolute left-0 mt-5 mb-[100%]">
-  <Books />
+Email krisyotam@protonmail.com if you think you have something to add. 
+
+<div className="w-screen relative left-[calc(-50vw+50%)] right-[calc(-50vw+50%)] my-12">
+  <Books
+    books={[
+      {
+        cover: "https://i.postimg.cc/ZYwrThj6/calculus-by-spivak.jpg",
+        title: "Calculus",
+        author: "Michael Spivak",
+      },
+      {
+        cover: "https://i.postimg.cc/HWJ3rxKT/calculus-vol1-tom-apostol.jpg",
+        title: "Calculus Vol. I",
+        author: "Tom M. Apostol",
+      },
+      {
+        cover: "https://i.postimg.cc/sgTxtpzz/calculus-vol2-tom-apostol.jpg",
+        title: "Calculus Vol. II",
+        author: "Tom M. Apostol",
+      },
+      {
+        cover: "https://i.postimg.cc/htpmnXxL/baby-rudin.jpg",
+        title: "Principles in Mathematical Analysis",
+        author: "Walter Rudin",
+      },
+      {
+        cover: "https://i.postimg.cc/Vv0Nx6wF/elementary-analysis-kenneth-ross.jpg",
+        title: "Elementary Analysis",
+        author: "Kenneth A. Ross",
+      },
+      {
+        cover: "https://i.postimg.cc/wx1cqQTw/understanding-analysis-stephen-abott.jpg",
+        title: "Understanding Analysis",
+        author: "Stephen Abott",
+      },
+      {
+        cover: "https://i.postimg.cc/8kxdjf7N/basic-mathematics-serge-lang.jpg",
+        title: "Basic Mathematics",
+        author: "Serge Lang",
+      },
+      {
+        cover: "https://i.postimg.cc/k5MKkxpF/pre-calculus-with-limits-ron-larson.jpg",
+        title: "Precalculus with Limits",
+        author: "Ron Larson",
+      },
+      {
+        cover: "https://i.postimg.cc/W1TkkGTL/theprinceton-companion-to-mathematics-tim-gowers.jpg",
+        title: "The Princeton Companion to Mathematics",
+        author: "Tim Gowers",
+      },
+      {
+        cover: "https://i.postimg.cc/yNWWmnG5/a-synopsis-of-results-in-pure-and-applied-mathematics.jpg",
+        title: "A Synoposis of Elementary Results in Pure and Applied Mathematics",
+        author: "Jane Austen",
+      },
+      {
+        cover: "https://i.postimg.cc/RFHF8h4L/all-the-math-you-missed-thomas-garrity.jpg",
+        title: "All the Math You Missed",
+        author: "Thomas A. Garrity",
+      },
+      {
+        cover: "https://i.postimg.cc/bN8JCqM1/table-of-integrals-series-and-products.jpg",
+        title: "Table of Integrals, Series, and Products",
+        author: "Daniel Zwillinger, I.S Gradshteyn, & I. M. Ryzhik",
+      },
+      {
+        cover: "https://i.postimg.cc/rsT8P9hq/euclidean-geometry-in-mathematical-olympiads-evan-chen.jpg",
+        title: "Euclidean Geometry in Mathematical Olympiads",
+        author: "Evan Chen",
+      },
+      {
+        cover: "https://i.postimg.cc/Qx0Xf1cr/euclids-elements.jpg",
+        title: "Euclid's Elements",
+        author: "Euclid",
+      },
+      {
+        cover: "https://i.postimg.cc/s2ZsfLqV/princeton-companion-to-applied-mathematics.jpg",
+        title: "The Princeton Companion to Applied Mathematics",
+        author: "Nicholas J. Higham",
+      },
+      {
+        cover: "https://i.postimg.cc/D0DKKd6W/kiselev-geometry-I.jpg",
+        title: "Kiselev's Geometry Book I. Plainimetry",
+        author: "Alexander Givental",
+      },
+      {
+        cover: "https://i.postimg.cc/pV1v8Rv2/kiselev-geometry-II.jpg",
+        title: "Kiselev's Geometry Book II. Stereometry",
+        author: "Alexander Givental",
+      },
+      {
+        cover: "https://i.postimg.cc/5NY1b0rh/algebra-serge-lang.jpg",
+        title: "Algebra",
+        author: "Serge Lang",
+      },
+      {
+        cover: "https://i.postimg.cc/X7RWJWSp/linear-algebra-done-right-sheldon-axler.jpg",
+        title: "Linear Algebra Done Right",
+        author: "Sheldon Axler",
+      },
+      {
+        cover: "https://i.postimg.cc/5t1MBmtJ/an-introduction-to-the-theory-of-numbers-hardy.jpg",
+        title: "An Introduction to the Theory of Numbers",
+        author: "G.H. Hardy, and E.M. Wright",
+      },
+    ]}
+  />
 </div>
+

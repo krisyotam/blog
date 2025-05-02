@@ -1,0 +1,180 @@
+import { NextResponse } from 'next/server'
+import { spawnSync } from 'child_process'
+import fs from 'fs'
+import os from 'os'
+import path from 'path'
+import { randomUUID } from 'crypto'
+
+// Check if a command is available in the system
+function commandExists(command: string): boolean {
+  try {
+    const result = spawnSync(command, ['--version'], { shell: true });
+    return result.status === 0;
+  } catch (error) {
+    return false;
+  }
+}
+
+export async function POST(request: Request) {
+  console.log('TikZ API route called')
+  
+  try {
+    const json = await request.json() as { code?: string }
+    const { code } = json
+    
+    console.log('Received code:', code ? `${code.substring(0, 50)}...` : 'null')
+    
+    if (!code) {
+      console.error('No TikZ code provided')
+      return NextResponse.json({ error: 'No TikZ code provided' }, { status: 400 })
+    }
+
+    // Create a very simple temp dir with a random ID - NO special chars, NO spaces
+    const tmpBase = "c:/tikztemp";
+    if (!fs.existsSync(tmpBase)) {
+      fs.mkdirSync(tmpBase, { recursive: true });
+    }
+    
+    const dirId = randomUUID().slice(0, 8);
+    const tmp = path.join(tmpBase, dirId);
+    fs.mkdirSync(tmp);
+    
+    console.log('Created temp directory:', tmp)
+    
+    // Check for available TeX commands
+    const hasLatex = commandExists('latex');
+    const hasPdflatex = commandExists('pdflatex');
+    const hasDvisvgm = commandExists('dvisvgm');
+    
+    console.log('Available commands:', { 
+      latex: hasLatex, 
+      pdflatex: hasPdflatex, 
+      dvisvgm: hasDvisvgm 
+    });
+    
+    if (!hasLatex && !hasPdflatex) {
+      return NextResponse.json({ 
+        error: 'TeX compilation not available',
+        details: 'Neither latex nor pdflatex is available on this system'
+      }, { status: 500 });
+    }
+    
+    if (!hasDvisvgm) {
+      return NextResponse.json({ 
+        error: 'SVG conversion not available',
+        details: 'dvisvgm is not available on this system'
+      }, { status: 500 });
+    }
+    
+    const texFile = path.join(tmp, 'diagram.tex')
+    const dviFile = path.join(tmp, 'diagram.dvi')
+    const pdfFile = path.join(tmp, 'diagram.pdf')
+    const svgFile = path.join(tmp, 'diagram.svg')
+
+    // full TikZ preamble
+    const tex = `
+\\documentclass[tikz,border=2pt]{standalone}
+\\usepackage{tikz}
+\\usetikzlibrary{
+  arrows.meta,
+  positioning,
+  shapes.geometric,
+  matrix,
+  cd,
+  calc
+}
+\\begin{document}
+${code}
+\\end{document}
+`.trim()
+
+    fs.writeFileSync(texFile, tex)
+    console.log('Wrote TeX file:', texFile)
+
+    // Use latex to generate DVI directly
+    if (hasLatex) {
+      const latexResult = spawnSync('latex', [
+        '-interaction=nonstopmode', 
+        '-output-directory=' + tmp, // Use single argument format to avoid space issues
+        texFile
+      ], { shell: true }); // Use shell: true for Windows
+      
+      console.log('latex stdout:', latexResult.stdout?.toString())
+      console.log('latex stderr:', latexResult.stderr?.toString())
+      
+      if (latexResult.error || latexResult.status !== 0) {
+        console.error('latex error:', latexResult.error)
+        return NextResponse.json({ 
+          error: 'TikZ compilation failed: latex error',
+          details: latexResult.stderr?.toString() || latexResult.error?.message
+        }, { status: 500 })
+      }
+    }
+    // If latex isn't available but pdflatex is, use it and convert PDF to SVG directly
+    else if (hasPdflatex) {
+      const pdflatexResult = spawnSync('pdflatex', [
+        '-interaction=nonstopmode', 
+        '-output-directory=' + tmp, // Use single argument format to avoid space issues
+        texFile
+      ], { shell: true }); // Use shell: true for Windows
+      
+      console.log('pdflatex stdout:', pdflatexResult.stdout?.toString())
+      
+      if (pdflatexResult.error || pdflatexResult.status !== 0) {
+        console.error('pdflatex error:', pdflatexResult.error)
+        return NextResponse.json({ 
+          error: 'TikZ compilation failed: pdflatex error',
+          details: pdflatexResult.stderr?.toString() || pdflatexResult.error?.message
+        }, { status: 500 })
+      }
+      
+      // If using pdflatex, we need pdf2svg or Inkscape or similar to convert the PDF to SVG
+      return NextResponse.json({ 
+        error: 'System configuration issue',
+        details: 'This server is configured with pdflatex but not latex. Contact the administrator to install the latex package.'
+      }, { status: 500 });
+    }
+    
+    // Convert DVI to SVG
+    const dvisvgmResult = spawnSync('dvisvgm', [
+      '--no-fonts', 
+      dviFile, 
+      '-o', 
+      svgFile
+    ], { shell: true }); // Use shell: true for Windows
+    
+    console.log('dvisvgm stdout:', dvisvgmResult.stdout?.toString())
+    console.log('dvisvgm stderr:', dvisvgmResult.stderr?.toString())
+    
+    if (dvisvgmResult.error || dvisvgmResult.status !== 0) {
+      console.error('dvisvgm error:', dvisvgmResult.error)
+      return NextResponse.json({ 
+        error: 'TikZ compilation failed: dvisvgm error',
+        details: dvisvgmResult.stderr?.toString() || dvisvgmResult.error?.message
+      }, { status: 500 })
+    }
+
+    try {
+      const svg = fs.readFileSync(svgFile, 'utf8')
+      console.log('SVG generated successfully, length:', svg.length)
+      return new NextResponse(svg, {
+        headers: {
+          'Content-Type': 'image/svg+xml',
+          'Cache-Control': 's-maxage=86400, stale-while-revalidate',
+        },
+      })
+    } catch (err) {
+      console.error('Failed to read SVG file:', err)
+      return NextResponse.json({ 
+        error: 'Failed to read generated SVG file',
+        details: (err as Error).message
+      }, { status: 500 })
+    }
+  } catch (err) {
+    console.error('Error processing TikZ request:', err)
+    return NextResponse.json({ 
+      error: 'Error processing TikZ request', 
+      details: (err as Error).message
+    }, { status: 500 })
+  }
+}

@@ -8,6 +8,8 @@ export type Post = {
   title: string;
   views: number;
   viewsFormatted: string;
+  category: string;
+  tags: string[];
 };
 
 // shape of the HSET in redis

@@ -55,3 +55,47 @@ rest of the site.
 
 An index of all posts is maintained in JSON format as `./posts.json`
 for practical reasons.
+
+## TikZ Support
+
+This blog includes support for rendering [TikZ](https://tikz.dev/) diagrams in MDX files. To use TikZ, the following dependencies must be installed:
+
+- `latex` - For compiling TikZ code to DVI
+- `dvisvgm` - For converting DVI to SVG
+
+### Usage in MDX
+
+```mdx
+<Tikz>
+{String.raw`
+\begin{tikzpicture}
+  % Nodes
+  \node[circle,draw] (A) at (0,0) {A};
+  \node[circle,draw] (B) at (2,1) {B};
+  \node[circle,draw] (C) at (2,-1) {C};
+  \node[circle,draw] (D) at (4,0) {D};
+  
+  % Edges
+  \draw[->] (A) -- (B);
+  \draw[->] (A) -- (C);
+  \draw[->] (B) -- (D);
+  \draw[->] (C) -- (D);
+\end{tikzpicture}
+`}
+</Tikz>
+```
+
+### Deployment on Vercel
+
+To deploy this blog with TikZ support on Vercel, you need to set up a build environment with the required TeX dependencies. 
+
+1. Create a `.vercelignore` file to exclude unnecessary files from the deployment.
+2. Set up a custom build script in your `package.json` that installs the required dependencies.
+
+Example build command for Ubuntu-based Vercel deployments:
+
+```
+apt-get update && apt-get install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-pictures dvisvgm && npm run build
+```
+
+For more information, refer to Vercel's documentation on [installing system dependencies](https://vercel.com/docs/concepts/functions/serverless-functions/runtimes/node-js#installing-system-dependencies).

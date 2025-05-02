@@ -9,12 +9,17 @@ type SortSetting = ["date" | "views", "desc" | "asc"];
 
 const fetcher = (url: string) => fetch(url).then(res => res.json());
 
-export function Posts({ posts: initialPosts }) {
+export function Posts({ posts: initialPosts, revalidate = true }: { posts: any[]; revalidate?: boolean }) {
   const [sort, setSort] = useState<SortSetting>(["date", "desc"]);
-  const { data: posts } = useSWR("/api/posts", fetcher, {
-    fallbackData: initialPosts,
-    refreshInterval: 5000,
-  });
+  const { data: posts } = useSWR(
+    "/api/posts",
+    fetcher,
+    {
+      fallbackData: initialPosts,
+      refreshInterval: revalidate ? 5000 : 0,
+      revalidateOnMount: revalidate,
+    }
+  );
 
   function sortDate() {
     setSort(sort => [

@@ -25,9 +25,9 @@ import Collapse from "app/(post)/components/collapse";
 import { Excerpt } from "app/(post)/components/excerpt";
 import { Quote } from "app/(post)/components/quote";
 import Book from "app/(post)/components/book";
-
-// import your math component
 import Math from "app/(post)/components/math";
+import Tikz from "app/(post)/components/tikz";
+import Books from "app/(post)/components/books";
 
 export function useMDXComponents(components: {
   [component: string]: React.ComponentType;
@@ -65,6 +65,8 @@ export function useMDXComponents(components: {
     Collapse,
     Excerpt,
     Quote,
-    Book
+    Book,
+    Tikz,
+    Books
   };
 }

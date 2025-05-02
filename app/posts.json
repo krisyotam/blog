@@ -3,77 +3,107 @@
     {
       "id": "making-the-web-faster",
       "date": "June 23, 2021",
-      "title": "Making the Web. Faster."
+      "title": "Making the Web. Faster.",
+      "category": "Performance",
+      "tags": ["web", "speed", "optimization"]
     },
     {
       "id": "next-for-vercel",
       "date": "December 16, 2020",
-      "title": "Next for Vercel"
+      "title": "Next for Vercel",
+      "category": "NextJS",
+      "tags": ["vercel", "framework", "ssr"]
     },
     {
       "id": "books-people-reread",
       "date": "August 2, 2020",
-      "title": "Books people re-read"
+      "title": "Books people re-read",
+      "category": "Books",
+      "tags": ["reading", "recommendations", "nonfiction"]
     },
     {
       "id": "develop-preview-test",
       "date": "June 11, 2020",
-      "title": "Develop, Preview, Test"
+      "title": "Develop, Preview, Test",
+      "category": "Development",
+      "tags": ["development", "preview", "testing"]
     },
     {
       "id": "static-hoisting",
       "date": "May 2, 2020",
-      "title": "Static Hoisting"
+      "title": "Static Hoisting",
+      "category": "Performance",
+      "tags": ["static", "bundling", "hoisting"]
     },
     {
       "id": "an-ode-to-code-golf",
       "date": "April 26, 2020",
-      "title": "An ode to code golf"
+      "title": "An ode to code golf",
+      "category": "Programming",
+      "tags": ["javascript", "code golf", "esoteric"]
     },
     {
       "id": "vercel",
       "date": "April 21, 2020",
-      "title": "Vercel"
+      "title": "Vercel",
+      "category": "Platform",
+      "tags": ["deployment", "cloud", "vercel"]
     },
     {
       "id": "2019-in-review",
       "date": "January 2, 2020",
-      "title": "2019 in Review"
+      "title": "2019 in Review",
+      "category": "Yearly",
+      "tags": ["2019", "review", "summary"]
     },
     {
       "id": "its-hard-to-forego-efficiency",
       "date": "March 28, 2017",
-      "title": "It's Hard to Forego Efficiency"
+      "title": "It's Hard to Forego Efficiency",
+      "category": "Programming",
+      "tags": ["efficiency", "tradeoffs", "performance"]
     },
     {
       "id": "2016-in-review",
       "date": "January 6, 2017",
-      "title": "2016 in Review"
+      "title": "2016 in Review",
+      "category": "Yearly",
+      "tags": ["2016", "review", "summary"]
     },
     {
       "id": "addressable-errors",
       "date": "February 4, 2016",
-      "title": "Addressable Errors"
+      "title": "Addressable Errors",
+      "category": "Error Handling",
+      "tags": ["errors", "debugging", "exceptions"]
     },
     {
       "id": "pure-ui",
       "date": "July 13, 2015",
-      "title": "Pure UI"
+      "title": "Pure UI",
+      "category": "UI",
+      "tags": ["ui", "design", "interface"]
     },
     {
       "id": "ecmascript-6",
       "date": "February 22, 2015",
-      "title": "ECMAScript 6"
+      "title": "ECMAScript 6",
+      "category": "JavaScript",
+      "tags": ["javascript", "es6", "features"]
     },
     {
       "id": "7-principles-of-rich-web-applications",
       "date": "November 4, 2014",
-      "title": "7 Principles of Rich Web Applications"
+      "title": "7 Principles of Rich Web Applications",
+      "category": "Architecture",
+      "tags": ["design", "principles", "architecture"]
     },
     {
       "id": "problems-from-calculus-by-mcmullen-i",
       "date": "May 1, 2025",
-      "title": "Problems from Calculus by McMullen I"
+      "title": "Problems from Calculus by McMullen I",
+      "category": "Mathematics",
+      "tags": ["calculus", "problems", "mcmullen"]
     }
   ]
 }

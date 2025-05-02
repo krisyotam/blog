@@ -47,6 +47,188 @@ export const metadata = {
   link="https://www.amazon.com/Pride-Prejudice-Jane-Austen/dp/0141439513"
 />
 
+<div className="tikz-center">
+  <Tikz>
+  {String.raw`
+  \begin{tikzpicture}
+    % Nodes
+    \node[circle,draw] (A) at (0,0) {A};
+    \node[circle,draw] (B) at (2,1) {B};
+    \node[circle,draw] (C) at (2,-1) {C};
+    \node[circle,draw] (D) at (4,0) {D};
+    
+    % Edges
+    \draw[->] (A) -- (B);
+    \draw[->] (A) -- (C);
+    \draw[->] (B) -- (D);
+    \draw[->] (C) -- (D);
+  \end{tikzpicture}
+  `}
+  </Tikz>
+</div>
+
+<div className="tikz-center">
+  <Tikz>
+    {String.raw`
+\usetikzlibrary{decorations.pathmorphing, backgrounds}
+
+\begin{tikzpicture}[
+  node/.style={circle, draw, fill=white, minimum size=8mm},
+  edge/.style={->, semithick, shorten >=2pt},
+  every loop/.style={min distance=10mm, looseness=10},
+  >=Stealth
+]
+  % Center coordinate
+  \coordinate (C) at (0,0);
+
+  % Place five nodes on a circle
+  \foreach \i/\name in {90/1, 18/2, -54/3, -126/4, -198/5} {
+    \node[node] (N\name) at (\i:3cm) {\name};
+  }
+
+  % Radial edges from center
+  \foreach \name in {1,2,3,4,5}
+    \draw[edge] (C) -- (N\name);
+
+  % Circular "ring" edges
+  \foreach \a/\b in {1/2,2/3,3/4,4/5,5/1}
+    \draw[edge, red, bend left=20] (N\a) to (N\b);
+
+  % Diagonal chords
+  \draw[edge, blue, dashed] (N1) to (N3);
+  \draw[edge, green, decorate, decoration={snake, amplitude=1pt, segment length=4pt}] (N2) to[bend right=30] (N5);
+
+  % Loop at the center
+  \draw[edge, purple, thick] (C) edge[loop above] ();
+
+  % Background highlight
+  \begin{scope}[on background layer]
+    \fill[yellow, opacity=0.1] (C) circle (3.2cm);
+  \end{scope}
+
+  % Title label
+  \node[below=1.5cm] at (C) {\itshape Complex Five-Node Graph};
+
+\end{tikzpicture}
+    `}
+  </Tikz>
+</div>
+
+## Classic Literature Collection
+
+<div className="w-screen relative left-[calc(-50vw+50%)] right-[calc(-50vw+50%)] my-12">
+  <Books
+    books={[
+      {
+        cover: "https://i.postimg.cc/ncWxzzZn/pride-and-prejudice-penguin-classics.jpg",
+        title: "Pride and Prejudice",
+        author: "Jane Austen",
+      },
+      {
+        cover: "https://i.postimg.cc/ncWxzzZn/pride-and-prejudice-penguin-classics.jpg",
+        title: "Sense and Sensibility",
+        author: "Jane Austen",
+      },
+      {
+        cover: "https://i.postimg.cc/ncWxzzZn/pride-and-prejudice-penguin-classics.jpg",
+        title: "Emma",
+        author: "Jane Austen",
+      },
+      {
+        cover: "https://i.postimg.cc/ncWxzzZn/pride-and-prejudice-penguin-classics.jpg",
+        title: "Persuasion",
+        author: "Jane Austen",
+      },
+      {
+        cover: "https://i.postimg.cc/ncWxzzZn/pride-and-prejudice-penguin-classics.jpg",
+        title: "Mansfield Park",
+        author: "Jane Austen",
+      },
+      {
+        cover: "https://i.postimg.cc/ncWxzzZn/pride-and-prejudice-penguin-classics.jpg",
+        title: "Northanger Abbey",
+        author: "Jane Austen",
+      },
+      {
+        cover: "https://i.postimg.cc/ncWxzzZn/pride-and-prejudice-penguin-classics.jpg",
+        title: "Lady Susan",
+        author: "Jane Austen",
+      },
+      {
+        cover: "https://i.postimg.cc/ncWxzzZn/pride-and-prejudice-penguin-classics.jpg",
+        title: "Love and Friendship",
+        author: "Jane Austen",
+      },
+      {
+        cover: "https://i.postimg.cc/ncWxzzZn/pride-and-prejudice-penguin-classics.jpg",
+        title: "The Watsons",
+        author: "Jane Austen",
+      },
+      {
+        cover: "https://i.postimg.cc/ncWxzzZn/pride-and-prejudice-penguin-classics.jpg",
+        title: "Sanditon",
+        author: "Jane Austen",
+      },
+      {
+        cover: "https://i.postimg.cc/ncWxzzZn/pride-and-prejudice-penguin-classics.jpg",
+        title: "Pride and Prejudice",
+        author: "Jane Austen",
+      },
+      {
+        cover: "https://i.postimg.cc/ncWxzzZn/pride-and-prejudice-penguin-classics.jpg",
+        title: "Sense and Sensibility",
+        author: "Jane Austen",
+      },
+      {
+        cover: "https://i.postimg.cc/ncWxzzZn/pride-and-prejudice-penguin-classics.jpg",
+        title: "Emma",
+        author: "Jane Austen",
+      },
+      {
+        cover: "https://i.postimg.cc/ncWxzzZn/pride-and-prejudice-penguin-classics.jpg",
+        title: "Persuasion",
+        author: "Jane Austen",
+      },
+      {
+        cover: "https://i.postimg.cc/ncWxzzZn/pride-and-prejudice-penguin-classics.jpg",
+        title: "Mansfield Park",
+        author: "Jane Austen",
+      },
+      {
+        cover: "https://i.postimg.cc/ncWxzzZn/pride-and-prejudice-penguin-classics.jpg",
+        title: "Northanger Abbey",
+        author: "Jane Austen",
+      },
+      {
+        cover: "https://i.postimg.cc/ncWxzzZn/pride-and-prejudice-penguin-classics.jpg",
+        title: "Lady Susan",
+        author: "Jane Austen",
+      },
+      {
+        cover: "https://i.postimg.cc/ncWxzzZn/pride-and-prejudice-penguin-classics.jpg",
+        title: "Love and Friendship",
+        author: "Jane Austen",
+      },
+      {
+        cover: "https://i.postimg.cc/ncWxzzZn/pride-and-prejudice-penguin-classics.jpg",
+        title: "The Watsons",
+        author: "Jane Austen",
+      },
+      {
+        cover: "https://i.postimg.cc/ncWxzzZn/pride-and-prejudice-penguin-classics.jpg",
+        title: "Sanditon",
+        author: "Jane Austen",
+      },
+    ]}
+  />
+</div>
+
+
+
+
+
+
+
 
 
 # On the Beauty of Mathematical Notation
@@ -129,24 +311,6 @@ This post serves both as an ode to the expressive power of mathematics and a rig
 
 <Math type="inline">\blacksquare</Math>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Following our [Series B last December](/2020/next-for-vercel), I'm happy to announce we've raised a [**$102M Series C**](https://techcrunch.com/2021/06/23/vercel-raises-102m-series-c-for-its-next-js-based-front-end-development-platform) from existing and new investors.
 
 Our vision of the Web is a global realtime medium for both creators and consumers,
@@ -190,8 +354,6 @@ frictionless collaboration:
 - Setting up and maintaining your developer environment
 - Integrating it into Git for continuous integration
 - Manually pushing and waiting to share progress with your team
-
-<Tweet id="1404291533042372608" caption="We can all contribute to the web, faster" />
 
 Perhaps the most incredible aspect of the Web is that it's not a read-only medium.
 Each Web browser is simultaneously the [consumption and creation mechanism](https://twitter.com/sulco/status/1177559150563344384).
