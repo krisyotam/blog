@@ -29,15 +29,20 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'No TikZ code provided' }, { status: 400 })
     }
 
-    // Create a very simple temp dir with a random ID - NO special chars, NO spaces
-    const tmpBase = "c:/tikztemp";
-    if (!fs.existsSync(tmpBase)) {
-      fs.mkdirSync(tmpBase, { recursive: true });
-    }
-    
+    // Create a platform-agnostic temp directory
+    const tempDir = os.tmpdir();
     const dirId = randomUUID().slice(0, 8);
-    const tmp = path.join(tmpBase, dirId);
-    fs.mkdirSync(tmp);
+    const tmp = path.join(tempDir, `tikz-${dirId}`);
+    
+    try {
+      fs.mkdirSync(tmp, { recursive: true });
+    } catch (err) {
+      console.error('Failed to create temp directory:', err);
+      return NextResponse.json({ 
+        error: 'Failed to create temporary directory', 
+        details: (err as Error).message 
+      }, { status: 500 });
+    }
     
     console.log('Created temp directory:', tmp)
     
