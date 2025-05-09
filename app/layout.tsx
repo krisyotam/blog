@@ -13,20 +13,20 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata = {
   title: "Kris Yotam's blog",
   description:
-    "Kris Yotam is the CEO and founder of Vercel, a software engineer, and the creator of Next.js, Mongoose, Socket.io and other open source libraries.",
+    "Kris Yotam is a undergrad mathematics student at IU Bloomington.",
   icons: { icon: '/images/logo.png' },
   openGraph: {
     title: "Kris Yotamg's blog",
     description:
-      "Kris Yotam is the CEO and founder of Vercel, a software engineer, and the creator of Next.js, Mongoose, Socket.io and other open source libraries.",
+      "Kris Yotam is a undergrad mathematics student at IU Bloomington.",
     url: "https://krisyotam.net",
     siteName: "Kris Yotamg's blog",
     images: ["/opengraph-image"],
   },
   twitter: {
     card: "summary_large_image",
-    site: "@rauchg",
-    creator: "@rauchg",
+    site: "@krisyotam",
+    creator: "@krisyotam",
   },
   metadataBase: new URL("https://krisyotam.net"),
 };

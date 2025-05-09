@@ -89,12 +89,29 @@ function List({ posts, sort }) {
     });
   }, [posts, sort]);
 
+  // Track posts within the same year to show year every 5 posts
+  let postsInCurrentYear = 0;
+  let currentYear = null;
+
   return (
     <ul>
       {sortedPosts.map((post, i: number) => {
         const year = getYear(post.date);
+        
+        // Check if this is a new year
+        if (currentYear !== year) {
+          currentYear = year;
+          postsInCurrentYear = 1;
+        } else {
+          postsInCurrentYear++;
+        }
+
         const firstOfYear =
           !sortedPosts[i - 1] || getYear(sortedPosts[i - 1].date) !== year;
+        
+        // Show the year if it's first of year OR every 5th post within the same year
+        const showYear = firstOfYear || postsInCurrentYear % 5 === 0;
+        
         const lastOfYear =
           !sortedPosts[i + 1] || getYear(sortedPosts[i + 1].date) !== year;
 
@@ -103,16 +120,16 @@ function List({ posts, sort }) {
             <Link href={`/${new Date(post.date).getFullYear()}/${post.id}`}>
               <span
                 className={`flex transition-[background-color] hover:bg-gray-100 dark:hover:bg-[#242424] active:bg-gray-200 dark:active:bg-[#222] border-y border-gray-200 dark:border-[#313131]
-                ${!firstOfYear ? "border-t-0" : ""}
+                ${!showYear ? "border-t-0" : ""}
                 ${lastOfYear ? "border-b-0" : ""}
               `}
               >
                 <span
                   className={`py-3 flex grow items-center ${
-                    !firstOfYear ? "ml-14" : ""
+                    !showYear ? "ml-14" : ""
                   }`}
                 >
-                  {firstOfYear && (
+                  {showYear && (
                     <span className="w-14 inline-block self-start shrink-0 text-gray-500 dark:text-gray-500">
                       {year}
                     </span>
