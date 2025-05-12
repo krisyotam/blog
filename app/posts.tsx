@@ -120,7 +120,7 @@ function List({ posts, sort, currentPage, postsPerPage }) {
 
   // Track posts within the same year to show year every 5 posts
   let postsInCurrentYear = 0;
-  let currentYear = null;
+  let currentYear: number | null = null;
 
   return (
     <ul>
