@@ -50,7 +50,18 @@ export default function RootLayout({
         <link rel="icon" href="/images/logo.png" />
         <script
           dangerouslySetInnerHTML={{
-            __html: `(${themeEffect.toString()})();(${doge.toString()})();`,
+            __html: `
+              (function() {
+                try {
+                  ${themeEffect.toString()}
+                  themeEffect();
+                  ${doge.toString()}
+                  doge();
+                } catch (e) {
+                  console.error('Theme initialization error:', e);
+                }
+              })();
+            `,
           }}
         />
         {/* Seline Analytics */}

@@ -18,13 +18,15 @@ export function ThemeToggle() {
   }, []);
 
   useEffect(() => {
-    setPreference(localStorage.getItem("theme"));
-    const current = themeEffect();
-    setCurrentTheme(current);
+    if (typeof window !== 'undefined') {
+      setPreference(localStorage.getItem("theme"));
+      const current = themeEffect();
+      setCurrentTheme(current);
 
-    const matchMedia = window.matchMedia("(prefers-color-scheme: dark)");
-    matchMedia.addEventListener("change", onMediaChange);
-    return () => matchMedia.removeEventListener("change", onMediaChange);
+      const matchMedia = window.matchMedia("(prefers-color-scheme: dark)");
+      matchMedia.addEventListener("change", onMediaChange);
+      return () => matchMedia.removeEventListener("change", onMediaChange);
+    }
   }, [onMediaChange]);
 
   const onStorageChange = useCallback(
@@ -37,13 +39,45 @@ export function ThemeToggle() {
   // when the preference changes, whether from this tab or another,
   // we want to recompute the current theme
   useEffect(() => {
-    setCurrentTheme(themeEffect());
+    if (typeof window !== 'undefined') {
+      const theme = themeEffect();
+      setCurrentTheme(theme);
+    }
   }, [preference]);
 
   useEffect(() => {
-    window.addEventListener("storage", onStorageChange);
-    return () => window.removeEventListener("storage", onStorageChange);
-  });
+    if (typeof window !== 'undefined') {
+      window.addEventListener("storage", onStorageChange);
+      return () => window.removeEventListener("storage", onStorageChange);
+    }
+  }, [onStorageChange]);
+
+  const toggleTheme = useCallback(() => {
+    // First determine what the new theme should be
+    let newPreference: string | null = currentTheme === "dark" ? "light" : "dark";
+    const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+
+    // If the user has their current OS theme as a preference (instead of auto)
+    // and they click the toggle, we want to reset the preference
+    if (preference !== null && systemTheme === currentTheme) {
+      newPreference = null;
+      localStorage.removeItem("theme");
+    } else {
+      localStorage.setItem("theme", newPreference);
+    }
+
+    // Track the event
+    va.track("Theme toggle", {
+      Theme: newPreference === null ? "system" : newPreference,
+    });
+
+    // Update preference state
+    setPreference(newPreference);
+    
+    // Force apply the theme immediately
+    const updatedTheme = themeEffect();
+    setCurrentTheme(updatedTheme);
+  }, [currentTheme, preference]);
 
   return (
     <>
@@ -90,28 +124,7 @@ export function ThemeToggle() {
           ev.preventDefault();
           // prevent the hover state from rendering
           setIsHoveringOverride(true);
-
-          let newPreference: string | null =
-            currentTheme === "dark" ? "light" : "dark";
-          const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
-            .matches
-            ? "dark"
-            : "light";
-
-          // if the user has their current OS theme as a preference (instead of auto)
-          // and they click the toggle, we want to switch to reset the preference
-          if (preference !== null && systemTheme === currentTheme) {
-            newPreference = null;
-            localStorage.removeItem("theme");
-          } else {
-            localStorage.setItem("theme", newPreference);
-          }
-
-          va.track("Theme toggle", {
-            Theme: newPreference === null ? "system" : newPreference,
-          });
-
-          setPreference(newPreference);
+          toggleTheme();
         }}
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => {
